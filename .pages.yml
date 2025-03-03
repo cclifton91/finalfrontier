@@ -26,3 +26,13 @@ content:
       - { name: "instagram", label: "Instagram", type: "string",}
       - { name: "linkedin", label: "LinkedIn", type: "string",}
       - { name: "youtube", label: "Youtube", type: "string",}   
+  - name: "social"
+    label: "Social Media"
+    type: "file"
+    path: "src/data/social.json"
+    fields:
+    - { name: "facebook", label: "Facebook", type: "string", }
+    - { name: "twitter", label: "Twitter", type: "string", }
+    - { name: "instagram", label: "Instagram", type: "string", } 
+    - { name: "linkedin", label: "LinkedIn", type: "string", } 
+    - { name: "youtube", label: "Youtube", type: "string", } 

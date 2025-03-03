@@ -1,5 +1,6 @@
 ---
 import settings from "../data/seo.json"
+import { SEO } from "astro-seo"
 
 export interface Props {
 	title?: string
@@ -8,44 +9,33 @@ export interface Props {
 	image?: string
 }
 
-const title = settings.title
-const description = settings.description
-const url = settings.url
-const image = settings.ogimage
+const { title = settings.title, description = settings.description, url = settings.url, image = settings.ogimage } = Astro.props
 ---
 
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 
-<!-- Primary Meta Tags -->
-<title>{title || settings.title}</title>
-<meta name="title" content={title || settings.title} />
-<meta name="description" content={description || settings.description} />
+<!-- SEO Component -->
+<SEO
+	title={title}
+	description={description}
+	canonical={url}
+	openGraph={{
+		basic: {
+			title: title,
+			type: "website",
+			image: image,
+			url: url,
+		},
+		optional: {
+			description: description,
+		},
+	}}
+/>
+
 <!-- settingsmap -->
 <link rel="settingsmap" href="/settingsmap.xml" />
 <!-- Favicon -->
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-<!--URL-->
-<link rel="canonical" href={settings.url} />
-
-<!-- Open Graph / Facebook -->
-<meta property="og:type" content="website" />
-<meta property="og:title" content={settings.title} />
-<meta property="og:description" content={settings.description} />
-<meta property="og:url" content={settings.url} />
-<meta property="og:image" content={image} />
-
-<!-- Twitter -->
-<meta property="twitter:card" content="summary_large_image" />
-<meta property="twitter:title" content={title} />
-<meta property="twitter:url" content={settings.url} />
-<meta property="twitter:description" content={description} />
-<meta property="twitter:image" content={image} />
 
 <!-- Google Fonts -->
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link rel="preload" href="" as="style" onload="this.onload=null;this.rel='stylesheet'" />
-<noscript>
-	<link href="" rel="stylesheet" type="text/css" />
-</noscript>
