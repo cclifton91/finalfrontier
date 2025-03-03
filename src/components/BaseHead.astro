@@ -1,0 +1,41 @@
+---
+import settings from "../data/seo.json"
+import { SEO } from "astro-seo"
+
+export interface Props {
+	title?: string
+	url?: string
+	description?: string
+	image?: string
+}
+
+const { title = settings.title, description = settings.description, url = settings.url, image = settings.ogimage } = Astro.props
+---
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+
+<!-- SEO Component -->
+<SEO
+	title={title}
+	description={description}
+	canonical={url}
+	openGraph={{
+		basic: {
+			title: title,
+			type: "website",
+			image: image,
+			url: url,
+		},
+		optional: {
+			description: description,
+		},
+	}}
+/>
+
+<!-- settingsmap -->
+<link rel="settingsmap" href="/settingsmap.xml" />
+<!-- Favicon -->
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+<!-- Google Fonts -->

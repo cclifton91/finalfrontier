@@ -19,6 +19,11 @@ pnpm-debug.log*
 
 # macOS-specific files
 .DS_Store
+.AppleDouble
+.LSOverride
 
 # jetbrains setting folder
 .idea/
+
+# Local Netlify folder
+.netlify

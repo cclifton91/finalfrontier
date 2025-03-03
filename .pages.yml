@@ -1,0 +1,38 @@
+media:
+  input: src/assets
+  output: /assets
+content:
+  - name: "settings"
+    label: "Basic Settings"
+    type: "file"
+    path: "src/data/settings.json"
+    fields:
+      - { name: "name", label: "Business Name", type: "string", required: true }
+      - { name: "email", label: "Email Address", type: "string", required: true }
+      - { name: "phone", label: "Phone Number", type: "string", required: true }
+      - { name: "address", label: "Address", type: "string", required: true }
+  - name: "seo"
+    label: "SEO"
+    type: "file"
+    path: "src/data/seo.json"
+    fields:
+      - { name: "title", label: "Title", type: "string", required: true }
+      - { name: "description", label: "Description", type: "string", required: true }
+      - { name: "url", label: "URL", type: "string", required: true }
+      - { name: "keywords", label: "Keywords", type: "string",}
+      - { name: "image", label: "OG:Image", type: "string", required: true }
+      - { name: "facebook", label: "Facebook", type: "string",}
+      - { name: "twitter", label: "Twitter", type: "string",}
+      - { name: "instagram", label: "Instagram", type: "string",}
+      - { name: "linkedin", label: "LinkedIn", type: "string",}
+      - { name: "youtube", label: "Youtube", type: "string",}   
+  - name: "social"
+    label: "Social Media"
+    type: "file"
+    path: "src/data/social.json"
+    fields:
+    - { name: "facebook", label: "Facebook", type: "string", }
+    - { name: "twitter", label: "Twitter", type: "string", }
+    - { name: "instagram", label: "Instagram", type: "string", } 
+    - { name: "linkedin", label: "LinkedIn", type: "string", } 
+    - { name: "youtube", label: "Youtube", type: "string", } 
