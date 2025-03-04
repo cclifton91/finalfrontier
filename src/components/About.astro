@@ -1,0 +1,57 @@
+---
+import { Image } from "astro:assets"
+import aboutImg from "../assets/man-working.jpg"
+---
+
+<section class="relative pb-20 lg:pb-40 lg:pt-20 2xl:py-40 bg-gray-950 overflow-hidden">
+	<div class="relative w-full lg:w-1/2 lg:ml-auto mb-20 lg:mb-0">
+		<Image src={aboutImg} class="hidden lg:block lg:absolute right-0 top-0 w-full h-128 object-cover" alt="Man, sitting down, on his phone, looking at a laptop" />
+		<Image src={aboutImg} class="lg:hidden w-full h-96 object-cover" alt="Man, sitting down, on his phone, looking at a laptop" />
+	</div>
+	<div class="container px-4 mx-auto">
+		<div class="flex flex-wrap -mx-4">
+			<div class="w-full lg:w-1/2 px-4">
+				<div class="max-w-lg">
+					<p class="mb-6 font-bold text-xl font-title text-white">This is the</p>
+					<h2 class="mb-12 text-5xl lg:text-7xl font-bold font-heading font-title text-amber-400">Final Frontier</h2>
+					<h3 class="mb-12 lg:mb-20 text-xl font-bold font-heading lg:text-4xl text-white">Real Estate Managers for Central Illinois</h3>
+					<div class="mb-8 pb-14">
+						<div class="max-w-lg">
+							<p class="text-lg text-gray-200">
+								At Final Frontier Real Estate, we believe that buying and selling property shouldn’t feel like navigating an asteroid field. Whether you're a homeowner looking for a fast, hassle-free
+								sale or an investor searching for off-market opportunities, we make the process smooth, transparent, and profitable.
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!---why choose us here -->
+		<div class="container px-4 mx-auto">
+			<div>
+				<div class="flex flex-wrap -mx-6 lg:-mx-14">
+					<div class="w-full md:w-1/2 lg:w-1/4 px-6 lg:px-14 mb-16 lg:mb-0">
+						<div class="py-px mb-12 bg-gray-500"></div>
+						<h3 class="mt-12 mb-8 text-lg font-bold font-heading text-white">Warp-Speed Transactions</h3>
+						<p class="text-lg text-gray-200">Sell your home fast, with cash offers in light-speed timeframes.</p>
+					</div>
+					<div class="w-full md:w-1/2 lg:w-1/4 px-6 lg:px-14 mb-16 lg:mb-0">
+						<div class="py-px mb-12 bg-gray-500"></div>
+						<h3 class="mt-12 mb-8 text-lg font-bold font-heading text-white">No Repairs, No Hassle</h3>
+						<p class="text-lg text-gray-200">We buy properties as-is, no need for costly renovations.</p>
+					</div>
+					<div class="w-full md:w-1/2 lg:w-1/4 px-6 lg:px-14 mb-16 md:mb-0">
+						<div class="py-px mb-12 bg-gray-500"></div>
+						<h3 class="mt-12 mb-8 text-lg font-bold font-heading text-white">Exclusive Investment Opportunities</h3>
+						<p class="text-lg text-gray-200">Access hand-picked properties for flips or rentals.</p>
+					</div>
+					<div class="w-full md:w-1/2 lg:w-1/4 px-6 lg:px-14">
+						<div class="py-px mb-12 bg-gray-500"></div>
+						<h3 class="mt-12 mb-8 text-lg font-bold font-heading text-white">A Transparent Process</h3>
+						<p class="text-lg text-gray-200">No red alerts! We keep things simple, honest, and efficient.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>

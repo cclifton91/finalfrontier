@@ -8,16 +8,10 @@ import BaseHead from "../components/BaseHead.astro"
 	<head>
 		<BaseHead />
 	</head>
-	<body>
-		<header>
-			<slot name="header" />
-		</header>
+	<body class="antialiased bg-body text-body font-body">
 		<main class="">
 			<slot />
 		</main>
-		<footer>
-			<slot name="footer" />
-		</footer>
 	</body>
 </html>
 

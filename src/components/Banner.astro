@@ -1,0 +1,14 @@
+---
+import { Image } from "astro:assets"
+import starsBG from "../assets/casey-horner.jpg"
+---
+
+<section class="py-36 relative">
+	<div class="absolute inset-0">
+		<Image src={starsBG} class="mx-auto h-full w-full object-cover bg-fixed" alt="Stars" />
+	</div>
+	<div class="absolute inset-0 bg-black/70"></div>
+	<div class="relative container px-4 mx-auto">
+		<div class="mx-auto mb-20 text-center"><h2 class="mt-8 text-6xl lg:text-7xl font-bold font-heading text-white font-title">Boldly Selling Where No One Has Sold Before!</h2></div>
+	</div>
+</section>
