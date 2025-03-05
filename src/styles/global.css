@@ -1,1 +1,22 @@
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Michroma&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap');
+
+/* Import Tailwind CSS */
 @import "tailwindcss";
+
+
+/* Optional: Add a layer to verify fonts are loading */
+@layer base {
+  html {
+    font-family: 'Nunito Sans', sans-serif;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: 'Michroma', sans-serif;
+  }
+}
