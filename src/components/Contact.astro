@@ -150,7 +150,13 @@ import circle from "../assets/circle.svg"
 										this.validateAddress() &
 										this.validateMessage();
 								}
-							}">
+							}"
+							x-init="
+						    email = '';
+						    phone = '';
+						    address = '';
+						    message = '';
+					  	">
 							<h3 class="mb-10 text-2xl font-bold text-white">Send a message!</h3>
 							<input type="hidden" name="Contact Form" value="Contact Form" />
 
