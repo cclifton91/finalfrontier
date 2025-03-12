@@ -150,8 +150,7 @@ import circle from "../assets/circle.svg"
 										this.validateAddress() & 
 										this.validateMessage();
 								}
-							}"
-							@submit.prevent="if (validateForm()) { setTimeout(() => $el.submit(), 100); }">
+							}">
 							<h3 class="mb-10 text-2xl font-bold text-white">Send a message!</h3>
 							<input type="hidden" name="Contact Form" value="Contact Form" />
 
@@ -228,16 +227,6 @@ import circle from "../assets/circle.svg"
 							</div>
 
 							<button type="submit" class="px-12 py-4 font-bold text-white transition duration-200 bg-red-800 rounded-full hover:bg-red-900"> Send message </button>
-
-							<!-- Success message (shown after form submission) -->
-							<div
-								x-data="{ show: false }"
-								x-init="$el.id = 'contact-form-success'; window.location.hash === '#success' ? show = true : null"
-								x-show="show"
-								class="hidden p-4 mt-6 text-green-800 bg-green-100 rounded-lg"
-								:class="{ 'hidden': !show }">
-								Thanks for your message! We'll get back to you shortly.
-							</div>
 						</form>
 					</div>
 				</div>
