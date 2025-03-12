@@ -145,9 +145,9 @@ import circle from "../assets/circle.svg"
 									return true;
 								},
 								validateForm() {
-									return this.validateEmail() & 
-										this.validatePhone() & 
-										this.validateAddress() & 
+									return this.validateEmail() &
+										this.validatePhone() &
+										this.validateAddress() &
 										this.validateMessage();
 								}
 							}">
@@ -180,6 +180,7 @@ import circle from "../assets/circle.svg"
 									name="email"
 									x-model="email"
 									@blur="validateEmail()"
+									required
 								/>
 								<p x-show="errors.email" x-text="errors.email" class="mt-1 ml-4 text-sm text-red-400"></p>
 							</div>
@@ -194,6 +195,7 @@ import circle from "../assets/circle.svg"
 									name="phone"
 									x-model="phone"
 									@blur="validatePhone()"
+									required
 								/>
 								<p x-show="errors.phone" x-text="errors.phone" class="mt-1 ml-4 text-sm text-red-400"></p>
 							</div>
@@ -208,6 +210,7 @@ import circle from "../assets/circle.svg"
 									name="address"
 									x-model="address"
 									@blur="validateAddress()"
+									required
 								/>
 								<p x-show="errors.address" x-text="errors.address" class="mt-1 ml-4 text-sm text-red-400"></p>
 							</div>
@@ -222,7 +225,8 @@ import circle from "../assets/circle.svg"
 									rows="10"
 									placeholder="Your message"
 									x-model="message"
-									@blur="validateMessage()"></textarea>
+									@blur="validateMessage()"
+									required></textarea>
 								<p x-show="errors.message" x-text="errors.message" class="mt-1 ml-4 text-sm text-red-400"></p>
 							</div>
 
