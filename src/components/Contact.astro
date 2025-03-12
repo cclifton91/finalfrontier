@@ -61,6 +61,31 @@ import circle from "../assets/circle.svg"
 				</div>
 				<div class="relative w-full px-4 pb-20 lg:w-1/2">
 					<div class="max-w-md lg:ml-20">
+						<noscript>
+							<form name="Contact Form" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+								<input type="hidden" name="form-name" value="Contact Form" />
+
+								<p>
+									<label>Email: <input type="email" name="email" required /></label>
+								</p>
+
+								<p>
+									<label>Phone: <input type="text" name="phone" required /></label>
+								</p>
+
+								<p>
+									<label>Property Address: <input type="text" name="address" required /></label>
+								</p>
+
+								<p>
+									<label>Message: <textarea name="message" required></textarea></label>
+								</p>
+
+								<p>
+									<button type="submit">Submit</button>
+								</p>
+							</form>
+						</noscript>
 						<form
 							name="Contact Form"
 							method="POST"
@@ -126,8 +151,9 @@ import circle from "../assets/circle.svg"
 										this.validateMessage();
 								}
 							}"
-							@submit.prevent="validateForm() && $el.submit()">
+							@submit.prevent="if (validateForm()) { setTimeout(() => $el.submit(), 100); }">
 							<h3 class="mb-10 text-2xl font-bold text-white">Send a message!</h3>
+							<input type="hidden" name="Contact Form" value="Contact Form" />
 
 							<!-- Netlify honeypot field to avoid spam -->
 							<div class="hidden">
