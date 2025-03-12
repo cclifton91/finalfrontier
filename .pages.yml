@@ -1,6 +1,6 @@
 media:
   input: src/media
-  output: /public/media
+  output: public/media
 content:
   - name: "settings"
     label: "Basic Information"
@@ -25,5 +25,5 @@ content:
       - { name: "description", label: "Description", type: "string", required: true }
       - { name: "url", label: "URL", type: "string", required: true }
       - { name: "keywords", label: "Keywords", type: "string",}
-      - { name: "image", label: "OG:Image", type: "image", required: true } 
+      - { name: "image", label: "OG:Image", type: "image", } 
 
