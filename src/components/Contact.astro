@@ -84,7 +84,7 @@ import circle from "../assets/circle.svg"
 										this.errors.email = 'Email is required';
 										return false;
 									}
-									if (!/^\S+@\S+\.\S+$/.test(this.email)) {
+									if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(this.email)) {
 										this.errors.email = 'Please enter a valid email';
 										return false;
 									}
