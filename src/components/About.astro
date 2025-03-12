@@ -11,10 +11,11 @@ import { lazy } from "astro:schema"
 			class="top-0 right-0 hidden object-cover w-full lg:block lg:absolute h-128"
 			loading="lazy"
 			format="webp"
-			widths={[400, 800, 1200]}
+			fit="cover"
+			widths={[400, 800]}
 			alt="Man, sitting down, on his phone, looking at a laptop"
 		/>
-		<Image src={aboutImg} class="object-cover w-full lg:hidden h-96" alt="Man, sitting down, on his phone, looking at a laptop" />
+		<Image src={aboutImg} class="object-cover w-full lg:hidden h-96" loading="lazy" format="webp" fit="cover" widths={[400, 800]} alt="Man, sitting down, on his phone, looking at a laptop" />
 	</div>
 	<div class="container px-4 mx-auto">
 		<div class="flex flex-wrap -mx-4">
