@@ -1,6 +1,6 @@
 media:
   input: src/media
-  output: public/media
+  output: /media
 content:
   - name: "settings"
     label: "Basic Information"
