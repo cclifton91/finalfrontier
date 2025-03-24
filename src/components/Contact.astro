@@ -25,7 +25,7 @@ import circle from "../assets/circle.svg"
 												fill="white"></path>
 										</svg>
 									</span>
-									<p class="text-lg font-bold text-white">{settings.phone}</p>
+									<p class="text-lg font-bold text-white"><a href={`tel:${settings.phone}`}>{settings.phone}</a></p>
 								</div>
 							</div>
 							<div class="px-8 py-6 mb-4 bg-gray-800 rounded-lg">
@@ -60,218 +60,278 @@ import circle from "../assets/circle.svg"
 					</div>
 				</div>
 				<div class="relative w-full px-4 pb-20 lg:w-1/2">
-					<div class="max-w-md lg:ml-20">
-						<noscript>
-							<form name="Contact Form" method="POST" data-netlify="true" netlify-honeypot="bot-field">
-								<input type="hidden" name="form-name" value="Contact Form" />
-
-								<p>
-									<label>Email: <input type="email" name="email" required /></label>
-								</p>
-
-								<p>
-									<label>Phone: <input type="text" name="phone" required /></label>
-								</p>
-
-								<p>
-									<label>Property Address: <input type="text" name="address" required /></label>
-								</p>
-
-								<p>
-									<label>Message: <textarea name="message" required></textarea></label>
-								</p>
-
-								<p>
-									<button type="submit">Submit</button>
-								</p>
-							</form>
-						</noscript>
+					<div class="max-w-lg lg:ml-20">
+						<!--FORM START -->
 						<form
-							name="Contact Form"
-							method="POST"
-							autocomplete="yes"
-							data-netlify="true"
-							netlify-honeypot="bot-field"
-							x-data="{
-								fullName: '',
-								email: '',
-								phone: '',
-								address: '',
-								message: '',
-								userType: 'homeowner',
-								errors: {
-									fullName: '',
-									email: '',
-									phone: '',
-									address: '',
-									message: ''
-								},
-								validateFullName() {
-									if (!this.fullName) {
-										this.errors.fullName = 'Full name is required';
-										return false;
-									}
-									if (this.fullName.length < 2) {
-										this.errors.fullName = 'Please enter your full name';
-										return false;
-									}
-									this.errors.fullName = '';
-									return true;
-								},
-								validateEmail() {
-									if (!this.email) {
-										this.errors.email = 'Email is required';
-										return false;
-									}
-									if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(this.email)) {
-										this.errors.email = 'Please enter a valid email';
-										return false;
-									}
-									this.errors.email = '';
-									return true;
-								},
-								validatePhone() {
-									if (!this.phone) {
-										this.errors.phone = 'Phone number is required';
-										return false;
-									}
-									if (!/^[0-9\-\+\(\)\s]{10,15}$/.test(this.phone)) {
-										this.errors.phone = 'Please enter a valid phone number';
-										return false;
-									}
-									this.errors.phone = '';
-									return true;
-								},
-								validateAddress() {
-									if (!this.address) {
-										this.errors.address = 'Property address is required';
-										return false;
-									}
-									this.errors.address = '';
-									return true;
-								},
-								validateMessage() {
-									if (!this.message) {
-										this.errors.message = 'Message is required';
-										return false;
-									}
-									this.errors.message = '';
-									return true;
-								},
-								validateForm() {
-									return this.validateFullName() &
-										this.validateEmail() &
-										this.validatePhone() &
-										this.validateAddress() &
-										this.validateMessage();
-								}
-							}"
-							x-init="
-								fullName = '';
-								email = '';
-								phone = '';
-								address = '';
-								message = '';
-							">
-							<h3 class="mb-10 text-2xl font-bold text-white">Send a message!</h3>
-							<input type="hidden" name="Contact Form" value="Contact Form" />
-
-							<!-- Netlify honeypot field to avoid spam -->
-							<div class="hidden">
-								<label>Don't fill this out if you're human: <input name="bot-field" /></label>
-							</div>
-
-							<div class="mb-6">
-								<label class="mr-2">
-									<input type="radio" name="userType" value="homeowner" x-model="userType" checked required />
-									<span class="ml-1 font-bold text-white font-paragraph">I'm a Homeowner</span>
-								</label>
-								<label>
-									<input type="radio" name="userType" value="investor" x-model="userType" required />
-									<span class="ml-1 font-bold text-white font-paragraph">I'm a Investor</span>
-								</label>
-							</div>
-
-							<div class="mb-3">
-								<input
-									class="w-full px-12 py-4 font-bold placeholder-gray-900 bg-white rounded-full focus:outline-none"
-									:class="{'border-2 border-red-500': errors.fullName}"
-									type="text"
-									placeholder="Your Full Name"
-									id="fullName"
-									name="fullName"
-									x-ref="fullName"
-									@blur="validateFullName()"
-									required
-								/>
-								<p x-show="errors.fullName" x-text="errors.fullName" class="mt-1 ml-4 text-sm text-red-400"></p>
-							</div>
-
-							<div class="mb-3">
-								<input
-									class="w-full px-12 py-4 font-bold placeholder-gray-900 bg-white rounded-full focus:outline-none"
-									:class="{'border-2 border-red-500': errors.email}"
-									type="email"
-									placeholder="Your Email"
-									id="email"
-									name="email"
-									x-ref="email"
-									@blur="validateEmail()"
-									required
-								/>
-								<p x-show="errors.email" x-text="errors.email" class="mt-1 ml-4 text-sm text-red-400"></p>
-							</div>
-
-							<div class="mb-3">
-								<input
-									class="w-full px-12 py-4 font-bold placeholder-gray-900 bg-white rounded-full focus:outline-none"
-									:class="{'border-2 border-red-500': errors.phone}"
-									type="text"
-									placeholder="Phone Number"
-									id="number"
-									name="phone"
-									x-ref="phone"
-									@blur="validatePhone()"
-									required
-								/>
-								<p x-show="errors.phone" x-text="errors.phone" class="mt-1 ml-4 text-sm text-red-400"></p>
-							</div>
-
-							<div class="mb-3">
-								<input
-									class="w-full px-12 py-4 font-bold placeholder-gray-900 bg-white rounded-full focus:outline-none"
-									:class="{'border-2 border-red-500': errors.address}"
-									type="text"
-									placeholder="Address of the Property"
-									id="address"
-									name="address"
-									x-ref="address"
-									@blur="validateAddress()"
-									required
-								/>
-								<p x-show="errors.address" x-text="errors.address" class="mt-1 ml-4 text-sm text-red-400"></p>
-							</div>
-
-							<div class="mb-6">
-								<textarea
-									class="w-full px-12 py-4 font-bold placeholder-gray-900 bg-white resize-none rounded-3xl focus:outline-none"
-									:class="{'border-2 border-red-500': errors.message}"
-									name="message"
-									id="message"
-									cols="30"
-									rows="10"
-									placeholder="Your message"
-									x-ref="message"
-									@blur="validateMessage()"
-									required></textarea>
-								<p x-show="errors.message" x-text="errors.message" class="mt-1 ml-4 text-sm text-red-400"></p>
-							</div>
-
-							<button type="submit" class="px-12 py-4 font-bold text-white transition duration-200 bg-red-800 rounded-full hover:bg-red-900"> Send message </button>
+						  name="contact"
+						  method="POST"
+						  autocomplete="on"
+						  data-netlify="true"
+						  data-netlify-honeypot="bot-field"
+						  x-data="{
+						    name: '',
+						    email: '',
+						    phone: '',
+						    address: '',
+						    type: '',
+						    length: '',
+						    sellby: '',
+						    price: '',
+						    message: '',
+						    errors: {},
+						    validateField(field) {
+						      this.errors[field] = '';
+						      switch(field) {
+						        case 'name':
+						          if (!this.name) this.errors.name = 'Name is required';
+						          break;
+						        case 'email':
+						          if (!this.email) this.errors.email = 'Email is required';
+						          else if (!/^[^@]+@[^@]+\.[a-zA-Z]{2,}$/.test(this.email)) this.errors.email = 'Invalid email';
+						          break;
+						        case 'phone':
+						          if (!this.phone) this.errors.phone = 'Phone number is required';
+						          else if (!/^\d{10}$/.test(this.phone.replace(/\D/g, ''))) this.errors.phone = 'Invalid phone number';
+						          break;
+						        case 'address':
+						          if (!this.address) this.errors.address = 'Address is required';
+						          break;
+						        case 'type':
+						          if (!this.type || this.type === '') this.errors.type = 'Property type is required';
+						          break;
+						        case 'length':
+						          if (!this.length || this.length === '') this.errors.length = 'Ownership length is required';
+						          break;
+						        case 'sellby':
+						          if (!this.sellby || this.sellby === '') this.errors.sellby = 'Timeframe is required';
+						          break;
+						        case 'price':
+						          if (!this.price) this.errors.price = 'Price is required';
+						          break;
+						        case 'message':
+						          if (!this.message) this.errors.message = 'Message is required';
+						          break;
+						      }
+						      return !this.errors[field];
+						    },
+						    validateForm() {
+						      this.errors = {};
+						      ['name', 'email', 'phone', 'address', 'type', 'length', 'sellby', 'price', 'message'].forEach(f => this.validateField(f));
+						      return !Object.values(this.errors).some(error => error !== '');
+						    }
+						  }"
+						  x-on:submit.prevent="validateForm() && $el.submit()"
+						>
+						  <!-- Netlify Spam Protection -->
+						  <input type="hidden" name="form-name" value="contact" />
+						  <p class="hidden">
+						    <label>Don't fill this out: <input name="bot-field" /></label>
+						  </p>
+							<!-- Basic Information Section -->
+						  <h3 class="mb-10 text-2xl font-bold text-white">Lets Get To Know You.</h3>
+						  <!-- Who Are You? -->
+						  <div class="flex flex-col gap-4 mb-6 sm:flex-row">
+						    <label class="flex items-center">
+						      <input type="radio" name="userType" value="homeowner" checked={true} required />
+						      <span class="ml-1 font-bold text-white font-paragraph">I'm a Homeowner</span>
+						    </label>
+						    <label class="flex items-center">
+						      <input type="radio" name="userType" value="investor" required />
+						      <span class="ml-1 font-bold text-white font-paragraph">I'm a Investor</span>
+						    </label>
+						    <label class="flex items-center">
+						      <input type="radio" name="userType" value="agent" required />
+						      <span class="ml-1 font-bold text-white font-paragraph">I'm a Agent</span>
+						    </label>
+						  </div>
+						  <!-- Name -->
+						  <input
+						    class="w-full px-12 py-4 mb-3 font-bold placeholder-gray-500 bg-white rounded-full focus:outline-none"
+						    type="text"
+						    placeholder="Full Name"
+						    id="name"
+						    name="name"
+						    x-model="name"
+						    x-bind:class="{'border border-red-500': errors.name}"
+						    x-on:blur="validateField('name')"
+						    required
+						  />
+						  <p x-show="errors.name" class="my-1 text-sm text-red-400" x-text="errors.name"></p>
+						  <!-- Phone and Email -->
+						  <input
+						    class="w-full px-12 py-4 mb-3 font-bold placeholder-gray-500 bg-white rounded-full focus:outline-none"
+						    type="email"
+						    placeholder="Email"
+						    id="email"
+						    name="email"
+						    x-model="email"
+						    x-bind:class="{'border border-red-500': errors.email}"
+						    x-on:blur="validateField('email')"
+						    required
+						  />
+						  <p x-show="errors.email" class="my-1 text-sm text-red-400" x-text="errors.email"></p>
+						  <input
+						    class="w-full px-12 py-4 mb-3 font-bold placeholder-gray-500 bg-white rounded-full focus:outline-none"
+						    type="tel"
+						    placeholder="Phone Number"
+						    id="phone"
+						    name="phone"
+						    x-model="phone"
+						    x-bind:class="{'border border-red-500': errors.phone}"
+						    x-on:blur="validateField('phone')"
+						    required
+						  />
+						  <p x-show="errors.phone" class="my-1 text-sm text-red-400" x-text="errors.phone"></p>
+						  <h3 class="my-10 text-2xl font-bold text-white">Tell Us About Your Property.</h3>
+						  <!-- Property Section -->
+						  <!-- Property Details -->
+						  <div class="flex flex-col gap-4 mb-6 sm:flex-row">
+						    <label class="flex items-stretch">
+						      <input type="radio" name="propertyStatus" value="occupied" checked={true} required />
+						      <span class="ml-1 font-bold text-white font-paragraph">Property is Occupied</span>
+						    </label>
+						    <label class="flex">
+						      <input type="radio" name="propertyStatus" value="listed" required />
+						      <span class="ml-1 font-bold text-white font-paragraph">Property is Listed</span>
+						    </label>
+						  </div>
+						  <!-- Property Address -->
+						  <input
+						    class="w-full px-6 py-4 mb-3 font-bold placeholder-gray-500 bg-white rounded-full focus:outline-none"
+						    type="text"
+						    placeholder="Property Address"
+						    id="address"
+						    name="address"
+						    x-model="address"
+						    x-bind:class="{'border border-red-500': errors.address}"
+						    x-on:blur="validateField('address')"
+						    required
+						  />
+						  <p x-show="errors.address" class="my-1 text-sm text-red-400" x-text="errors.address"></p>
+						  <!-- Property Type -->
+						  <div class="mb-3">
+						    <div class="relative">
+						      <select 
+						        class="block w-full px-6 py-4 font-bold bg-white border rounded-full appearance-none border-gray-50 focus:outline-none" 
+						        name="propertyType" 
+						        id="propertyType" 
+						        x-model="type"
+						        x-bind:class="{'border border-red-500': errors.type}"
+						        x-on:blur="validateField('type')"
+						        required
+						      >
+						        <option value="">Type of Property</option>
+						        <option value="mobile">Mobile Home</option>
+						        <option value="manufactured">Manufactured</option>
+						        <option value="condo">Condo</option>
+						        <option value="townhouse">Townhouse</option>
+						      </select>
+						      <div class="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 pointer-events-none">
+						        <svg class="w-4 h-4 fill-current" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 20 20">
+						          <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"></path>
+						        </svg>
+						      </div>
+						    </div>
+						  </div>
+						  <p x-show="errors.type" class="my-1 text-sm text-red-400" x-text="errors.type"></p>
+						  <!-- How long have you owned the property? -->
+						  <div class="mb-3">
+						    <div class="relative">
+						      <select 
+						        class="block w-full px-6 py-4 font-bold bg-white border rounded-full appearance-none border-gray-50 focus:outline-none" 
+						        name="ownershipLength" 
+						        id="ownershipLength" 
+						        x-model="length"
+						        x-bind:class="{'border border-red-500': errors.length}"
+						        x-on:blur="validateField('length')"
+						        required
+						      >
+						        <option value="" style="color: #6b7280;">How Long Have You Owned The Property?</option>
+						        <option value="0-11">0-11 months</option>
+						        <option value="1-5">1-5 years</option>
+						        <option value="5-15">5-15 years</option>
+						        <option value="15-25">15-25 years</option>
+						        <option value="26+">26+ years</option>
+						      </select>
+						      <div class="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 pointer-events-none">
+						        <svg class="w-4 h-4 fill-current" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 20 20">
+						          <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"></path>
+						        </svg>
+						      </div>
+						    </div>
+						  </div>
+						  <p x-show="errors.length" class="my-1 text-sm text-red-400" x-text="errors.length"></p>
+						  <!-- When Would You Like To Sell? -->
+						  <div class="mb-3">
+						    <div class="relative">
+						      <select 
+						        class="block w-full px-6 py-4 font-bold bg-white border rounded-full appearance-none border-gray-50 focus:outline-none" 
+						        name="sellTimeframe" 
+						        id="sellTimeframe" 
+						        x-model="sellby"
+						        x-bind:class="{'border border-red-500': errors.sellby}"
+						        x-on:blur="validateField('sellby')"
+						        required
+						      >
+						        <option value="">When Would You Like To Sell?</option>
+						        <option value="asap">ASAP</option>
+						        <option value="within-year">Within the year</option>
+						        <option value="next-year">Next year or later</option>
+						      </select>
+						      <div class="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 pointer-events-none">
+						        <svg class="w-4 h-4 fill-current" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 20 20">
+						          <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"></path>
+						        </svg>
+						      </div>
+						    </div>
+						  </div>
+						  <p x-show="errors.sellby" class="my-1 text-sm text-red-400" x-text="errors.sellby"></p>
+						  <!-- Ideal Asking Price -->
+						  <input
+						    class="w-full px-6 py-4 mb-3 font-bold placeholder-gray-500 bg-white rounded-full focus:outline-none"
+						    type="text"
+						    placeholder="Ideal Asking Price? (USD)"
+						    id="price"
+						    name="price"
+						    x-model="price"
+						    x-bind:class="{'border border-red-500': errors.price}"
+						    x-on:blur="validateField('price')"
+						    required
+						  />
+						  <p x-show="errors.price" class="my-1 text-sm text-red-400" x-text="errors.price"></p>
+						  <!-- Message -->
+						  <textarea
+						    class="w-full px-6 py-4 mb-6 font-bold placeholder-gray-500 bg-white resize-none rounded-3xl focus:outline-none"
+						    name="message"
+						    id="message"
+						    cols="20"
+						    rows="5"
+						    placeholder="What is the most important to you when working with us?"
+						    x-model="message"
+						    x-bind:class="{'border border-red-500': errors.message}"
+						    x-on:blur="validateField('message')"
+						    required
+						  ></textarea>
+						  <p x-show="errors.message" class="my-1 text-sm text-red-400" x-text="errors.message"></p>
+						  <button class="px-12 py-4 font-bold text-white transition duration-200 bg-red-800 rounded-full hover:bg-red-900">Send message</button>
 						</form>
 					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
+
+<style>
+  select:invalid {
+    color: #6b7280; /* Gray color for placeholder */
+  }
+  
+  select option:first-child {
+    color: #6b7280;
+  }
+  
+  select option {
+    color: #111827; /* Dark color for other options */
+  }
+</style>
