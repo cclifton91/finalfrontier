@@ -69,57 +69,77 @@ import circle from "../assets/circle.svg"
 						  data-netlify="true"
 						  data-netlify-honeypot="bot-field"
 						  x-data="{
-						    name: '',
-						    email: '',
-						    phone: '',
-						    address: '',
-						    type: '',
-						    length: '',
-						    sellby: '',
-						    price: '',
-						    message: '',
-						    errors: {},
-						    validateField(field) {
-						      this.errors[field] = '';
-						      switch(field) {
-						        case 'name':
-						          if (!this.name) this.errors.name = 'Name is required';
-						          break;
-						        case 'email':
-						          if (!this.email) this.errors.email = 'Email is required';
-						          else if (!/^[^@]+@[^@]+\.[a-zA-Z]{2,}$/.test(this.email)) this.errors.email = 'Invalid email';
-						          break;
-						        case 'phone':
-						          if (!this.phone) this.errors.phone = 'Phone number is required';
-						          else if (!/^\d{10}$/.test(this.phone.replace(/\D/g, ''))) this.errors.phone = 'Invalid phone number';
-						          break;
-						        case 'address':
-						          if (!this.address) this.errors.address = 'Address is required';
-						          break;
-						        case 'type':
-						          if (!this.type || this.type === '') this.errors.type = 'Property type is required';
-						          break;
-						        case 'length':
-						          if (!this.length || this.length === '') this.errors.length = 'Ownership length is required';
-						          break;
-						        case 'sellby':
-						          if (!this.sellby || this.sellby === '') this.errors.sellby = 'Timeframe is required';
-						          break;
-						        case 'price':
-						          if (!this.price) this.errors.price = 'Price is required';
-						          break;
-						        case 'message':
-						          if (!this.message) this.errors.message = 'Message is required';
-						          break;
-						      }
-						      return !this.errors[field];
-						    },
-						    validateForm() {
-						      this.errors = {};
-						      ['name', 'email', 'phone', 'address', 'type', 'length', 'sellby', 'price', 'message'].forEach(f => this.validateField(f));
-						      return !Object.values(this.errors).some(error => error !== '');
-						    }
-						  }"
+								name: '',
+								email: '',
+								phone: '',
+								address: '',
+								type: '',
+								length: '',
+								sellby: '',
+								price: '',
+								message: '',
+								userType: '',
+								propertyStatus: '',
+								errors: {},
+								validateField(field) {
+									this.errors[field] = '';
+									switch(field) {
+										case 'name':
+											if (!this.name) this.errors.name = 'Name is required';
+											break;
+										case 'email':
+											if (!this.email) this.errors.email = 'Email is required';
+											else if (!/^[^@]+@[^@]+\\.[a-zA-Z]{2,}$/.test(this.email)) this.errors.email = 'Invalid email';
+											break;
+										case 'phone':
+											if (!this.phone) this.errors.phone = 'Phone number is required';
+											else if (!/^\\d{10}$/.test(this.phone.replace(/\\D/g, ''))) this.errors.phone = 'Invalid phone number';
+											break;
+										case 'address':
+											if (!this.address) this.errors.address = 'Address is required';
+											break;
+										case 'type':
+											if (!this.type) this.errors.type = 'Property type is required';
+											break;
+										case 'length':
+											if (!this.length) this.errors.length = 'Ownership length is required';
+											break;
+										case 'sellby':
+											if (!this.sellby) this.errors.sellby = 'Sell by date is required';
+											break;
+										case 'price':
+											if (!this.price) this.errors.price = 'Price is required';
+											break;
+										case 'message':
+											if (!this.message) this.errors.message = 'Message is required';
+											break;
+										case 'userType':
+											if (!this.userType) this.errors.userType = 'User type is required';
+											break;
+										case 'propertyStatus':
+											if (!this.propertyStatus) this.errors.propertyStatus = 'Property status is required';
+											break;
+									}
+									return !this.errors[field];
+								},
+								validateForm() {
+									this.errors = {};
+									[
+										'name',
+										'email',
+										'phone',
+										'address',
+										'type',
+										'length',
+										'sellby',
+										'price',
+										'message',
+										'userType',
+										'propertyStatus'
+									].forEach(f => this.validateField(f));
+									return !Object.values(this.errors).some(error => error !== '');
+								}
+							}"
 						  x-on:submit.prevent="validateForm() && $el.submit()"
 						>
 						  <!-- Netlify Spam Protection -->
@@ -132,17 +152,18 @@ import circle from "../assets/circle.svg"
 						  <!-- Who Are You? -->
 						  <div class="flex flex-col gap-4 mb-6 sm:flex-row">
 						    <label class="flex items-center">
-						      <input type="radio" name="userType" value="homeowner" checked={true} required />
+						      <input type="radio" name="userType" value="homeowner" x-model="userType" required />
 						      <span class="ml-1 font-bold text-white font-paragraph">I'm a Homeowner</span>
 						    </label>
 						    <label class="flex items-center">
-						      <input type="radio" name="userType" value="investor" required />
+						      <input type="radio" name="userType" value="investor" x-model="userType" required />
 						      <span class="ml-1 font-bold text-white font-paragraph">I'm a Investor</span>
 						    </label>
 						    <label class="flex items-center">
-						      <input type="radio" name="userType" value="agent" required />
+						      <input type="radio" name="userType" value="agent" x-model="userType" required />
 						      <span class="ml-1 font-bold text-white font-paragraph">I'm a Agent</span>
 						    </label>
+								<p x-show="errors.userType" class="text-sm text-red-500" x-text="errors.userType"></p>
 						  </div>
 						  <!-- Name -->
 						  <input
@@ -187,13 +208,14 @@ import circle from "../assets/circle.svg"
 						  <!-- Property Details -->
 						  <div class="flex flex-col gap-4 mb-6 sm:flex-row">
 						    <label class="flex items-stretch">
-						      <input type="radio" name="propertyStatus" value="occupied" checked={true} required />
+						      <input type="radio" name="propertyStatus" value="occupied" x-model="propertyStatus" required />
 						      <span class="ml-1 font-bold text-white font-paragraph">Property is Occupied</span>
 						    </label>
 						    <label class="flex">
-						      <input type="radio" name="propertyStatus" value="listed" required />
+						      <input type="radio" name="propertyStatus" value="listed" x-model="propertyStatus" required />
 						      <span class="ml-1 font-bold text-white font-paragraph">Property is Listed</span>
 						    </label>
+								<p x-show="errors.propertyStatus" class="text-sm text-red-500" x-text="errors.propertyStatus"></p>
 						  </div>
 						  <!-- Property Address -->
 						  <input
