@@ -63,85 +63,119 @@ import circle from "../assets/circle.svg"
 					<div class="max-w-lg lg:ml-20">
 						<!--FORM START -->
 						<form
-						  name="contact"
-						  method="POST"
-						  autocomplete="on"
-						  data-netlify="true"
-						  data-netlify-honeypot="bot-field"
-						  x-data="{
-								name: '',
-								email: '',
-								phone: '',
-								address: '',
-								type: '',
-								length: '',
-								sellby: '',
-								price: '',
-								message: '',
-								userType: '',
-								propertyStatus: '',
-								errors: {},
-								validateField(field) {
-									this.errors[field] = '';
-									switch(field) {
-										case 'name':
-											if (!this.name) this.errors.name = 'Name is required';
-											break;
-										case 'email':
-											if (!this.email) this.errors.email = 'Email is required';
-											else if (!/^[^@]+@[^@]+\\.[a-zA-Z]{2,}$/.test(this.email)) this.errors.email = 'Invalid email';
-											break;
-										case 'phone':
-											if (!this.phone) this.errors.phone = 'Phone number is required';
-											else if (!/^\\d{10}$/.test(this.phone.replace(/\\D/g, ''))) this.errors.phone = 'Invalid phone number';
-											break;
-										case 'address':
-											if (!this.address) this.errors.address = 'Address is required';
-											break;
-										case 'type':
-											if (!this.type) this.errors.type = 'Property type is required';
-											break;
-										case 'length':
-											if (!this.length) this.errors.length = 'Ownership length is required';
-											break;
-										case 'sellby':
-											if (!this.sellby) this.errors.sellby = 'Sell by date is required';
-											break;
-										case 'price':
-											if (!this.price) this.errors.price = 'Price is required';
-											break;
-										case 'message':
-											if (!this.message) this.errors.message = 'Message is required';
-											break;
-										case 'userType':
-											if (!this.userType) this.errors.userType = 'User type is required';
-											break;
-										case 'propertyStatus':
-											if (!this.propertyStatus) this.errors.propertyStatus = 'Property status is required';
-											break;
-									}
-									return !this.errors[field];
-								},
-								validateForm() {
-									this.errors = {};
-									[
-										'name',
-										'email',
-										'phone',
-										'address',
-										'type',
-										'length',
-										'sellby',
-										'price',
-										'message',
-										'userType',
-										'propertyStatus'
-									].forEach(f => this.validateField(f));
-									return !Object.values(this.errors).some(error => error !== '');
-								}
-							}"
-						  x-on:submit.prevent="validateForm() && $el.submit()"
-						>
+					  name="contact"
+					  method="POST"
+					  autocomplete="on"
+					  data-netlify="true"
+					  data-netlify-honeypot="bot-field"
+					  x-data="{
+					    name: '',
+					    email: '',
+					    phone: '',
+					    address: '',
+					    type: '',
+					    length: '',
+					    sellby: '',
+					    price: '',
+					    message: '',
+					    userType: '',
+					    propertyStatus: '',
+					    errors: {},
+					    validateField(field) {
+					      this.errors[field] = '';
+					      switch(field) {
+					        case 'name':
+					          if (!this.name) this.errors.name = 'Name is required';
+					          break;
+					        case 'email':
+					          if (!this.email) this.errors.email = 'Email is required';
+					          else if (!/^[^@]+@[^@]+\.[a-zA-Z]{2,}$/.test(this.email)) this.errors.email = 'Invalid email';
+					          break;
+					        case 'phone':
+					          if (!this.phone) this.errors.phone = 'Phone number is required';
+					          else if (!/^\d{10}$/.test(this.phone.replace(/\D/g, ''))) this.errors.phone = 'Invalid phone number';
+					          break;
+					        case 'address':
+					          if (!this.address) this.errors.address = 'Address is required';
+					          break;
+					        case 'type':
+					          if (!this.type) this.errors.type = 'Property type is required';
+					          break;
+					        case 'length':
+					          if (!this.length) this.errors.length = 'Ownership length is required';
+					          break;
+					        case 'sellby':
+					          if (!this.sellby) this.errors.sellby = 'Sell by date is required';
+					          break;
+					        case 'price':
+					          if (!this.price) this.errors.price = 'Price is required';
+					          break;
+					        case 'message':
+					          if (!this.message) this.errors.message = 'Message is required';
+					          break;
+					        case 'userType':
+					          if (!this.userType) this.errors.userType = 'User type is required';
+					          break;
+					        case 'propertyStatus':
+					          if (!this.propertyStatus) this.errors.propertyStatus = 'Property status is required';
+					          break;
+					      }
+					      return !this.errors[field];
+					    },
+					    validateForm() {
+					      this.errors = {};
+					      [
+					        'name',
+					        'email',
+					        'phone',
+					        'address',
+					        'type',
+					        'length',
+					        'sellby',
+					        'price',
+					        'message',
+					        'userType',
+					        'propertyStatus'
+					      ].forEach(f => this.validateField(f));
+					      return !Object.values(this.errors).some(error => error !== '');
+					    },
+					    submitForm() {
+					      if (!this.validateForm()) return;
+
+					      const formData = {
+					        name: this.name,
+					        email: this.email,
+					        phone: this.phone,
+					        address: this.address,
+					        type: this.type,
+					        length: this.length,
+					        sellby: this.sellby,
+					        price: this.price,
+					        message: this.message,
+					        userType: this.userType,
+					        propertyStatus: this.propertyStatus
+					      };
+
+					      fetch('/.netlify/functions/submit-to-sheets', {
+					        method: 'POST',
+					        headers: { 'Content-Type': 'application/json' },
+					        body: JSON.stringify(formData)
+					      })
+					      .then(res => {
+					        if (res.ok) {
+					          window.location.href = '/thank-you';
+					        } else {
+					          alert('There was a problem submitting the form. Please try again.');
+					        }
+					      })
+					      .catch(err => {
+					        console.error('Error submitting form:', err);
+					        alert('An unexpected error occurred.');
+					      });
+					    }
+					  }"
+					  x-on:submit.prevent="submitForm()"
+					>
 						  <!-- Netlify Spam Protection -->
 						  <input type="hidden" name="form-name" value="contact" />
 						  <p class="hidden">

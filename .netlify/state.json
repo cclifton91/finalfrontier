@@ -1,3 +1,21 @@
 {
-	"siteId": "cc3ea225-d4a1-4148-991c-5003366c09ad"
+	"siteId": "cc3ea225-d4a1-4148-991c-5003366c09ad",
+	"geolocation": {
+		"data": {
+			"city": "Chicago",
+			"country": {
+				"code": "US",
+				"name": "United States"
+			},
+			"subdivision": {
+				"code": "IL",
+				"name": "Illinois"
+			},
+			"timezone": "America/Chicago",
+			"latitude": 41.8835,
+			"longitude": -87.6305,
+			"postalCode": "60602"
+		},
+		"timestamp": 1742852083725
+	}
 }
