@@ -93,7 +93,6 @@ import circle from "../assets/circle.svg"
 					          break;
 					        case 'phone':
 					          if (!this.phone) this.errors.phone = 'Phone number is required';
-					          else if (!/^\d{10}$/.test(this.phone.replace(/\D/g, ''))) this.errors.phone = 'Invalid phone number';
 					          break;
 					        case 'address':
 					          if (!this.address) this.errors.address = 'Address is required';
