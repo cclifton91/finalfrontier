@@ -6,11 +6,9 @@ exports.handler = async function(event) {
       return { statusCode: 405, body: 'Method Not Allowed' };
     }
 
-    const data = JSON.parse(event.body)
-    console.log('SERVICE ACCOUNT:', process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL);
-    console.log('PRIVATE KEY START:', process.env.GOOGLE_PRIVATE_KEY.slice(0, 30)); // DON'T log the whole key!
+    const data = JSON.parse(event.body);
+    console.log('Received form data:', data);
 
-    // Updated auth method
     const doc = new GoogleSpreadsheet(process.env.GOOGLE_SHEET_ID, {
       auth: {
         client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
@@ -18,29 +16,39 @@ exports.handler = async function(event) {
       }
     });
 
+    console.log('Sheet ID exists:', !!process.env.GOOGLE_SHEET_ID);
+    console.log('Service email exists:', !!process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL);
+    console.log('Private key exists:', !!process.env.GOOGLE_PRIVATE_KEY);
+
     await doc.loadInfo();
+    console.log('Document loaded successfully');
+
     const sheet = doc.sheetsByIndex[0];
+    console.log('Sheet accessed:', sheet.title);
 
     await sheet.addRow({
       'Client Name': data.name,
       'Client Email': data.email,
       'Client Phone': data.phone,
       'Property Address': data.address,
-      'Property Length': data.length,
+      'Property Length': data.time,
       'Sell By': data.sellby,
       'Ideal Asking Price': data.price,
       'Most Important': data.message,
       'Who': data.userType,
       'Status': data.status,
-      'Submitted At': new Date().toISOString()
+      'Submitted At': new Date().toISOString(),
     });
+
+    console.log('Row added successfully');
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ message: 'Form submitted' }),
+      body: JSON.stringify({ message: 'Form submitted successfully' }),
     };
   } catch (error) {
-    console.error('❌ Google Sheets Submission Error:', error);
+    console.error('❌ Detailed error:', error.message);
+    console.error('Stack trace:', error.stack);
     return {
       statusCode: 500,
       body: JSON.stringify({ error: error.message }),

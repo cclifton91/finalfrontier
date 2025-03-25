@@ -73,7 +73,7 @@ import circle from "../assets/circle.svg"
 					    email: '',
 					    phone: '',
 					    address: '',
-					    length: '',
+					    time: '',
 					    sellby: '',
 					    price: '',
 					    message: '',
@@ -104,8 +104,8 @@ import circle from "../assets/circle.svg"
 					        case 'address':
 					          if (!this.address) this.errors.address = 'Address is required';
 					          break;
-					        case 'length':
-					          if (!this.length) this.errors.length = 'Ownership length is required';
+					        case 'time':
+					          if (!this.time) this.errors.time = 'Ownership time is required';
 					          break;
 					        case 'sellby':
 					          if (!this.sellby) this.errors.sellby = 'Sell by date is required';
@@ -132,7 +132,7 @@ import circle from "../assets/circle.svg"
 					        'email',
 					        'phone',
 					        'address',
-					        'length',
+					        'time',
 					        'sellby',
 					        'price',
 					        'message',
@@ -149,7 +149,7 @@ import circle from "../assets/circle.svg"
 					        email: this.email,
 					        phone: this.phone,
 					        address: this.address,
-					        length: this.length,
+					        time: this.time,
 					        sellby: this.sellby,
 					        price: this.price,
 					        message: this.message,
@@ -287,11 +287,11 @@ import circle from "../assets/circle.svg"
 					    <div class="relative">
 					      <select 
 					        class="block w-full px-6 py-4 font-bold bg-white border rounded-full appearance-none border-gray-50 focus:outline-none" 
-					        name="ownershipLength" 
-					        id="ownershipLength" 
-					        x-model="length"
-					        x-bind:class="{'border border-red-500': errors.length}"
-					        x-on:blur="validateField('length')"
+					        name="ownershiptime" 
+					        id="ownershiptime" 
+					        x-model="time"
+					        x-bind:class="{'border border-red-500': errors.time}"
+					        x-on:blur="validateField('time')"
 					        required
 					      >
 					        <option value="" style="color: #6b7280;">How Long Have You Owned The Property?</option>
@@ -308,7 +308,7 @@ import circle from "../assets/circle.svg"
 					      </div>
 					    </div>
 					  </div>
-					  <p x-show="errors.length" class="my-1 text-sm text-red-400" x-text="errors.length"></p>
+					  <p x-show="errors.time" class="my-1 text-sm text-red-400" x-text="errors.time"></p>
 					  <!-- When Would You Like To Sell? -->
 					  <div class="mb-3">
 					    <div class="relative">
