@@ -122,9 +122,6 @@ import circle from "../assets/circle.svg"
 					        case 'userType':
 					          if (!this.userType) this.errors.userType = 'User type is required';
 					          break;
-					        case 'propertyStatus':
-					          if (!this.propertyStatus) this.errors.propertyStatus = 'Property status is required';
-					          break;
 					      }
 					      return !this.errors[field];
 					    },
@@ -141,7 +138,6 @@ import circle from "../assets/circle.svg"
 					        'price',
 					        'message',
 					        'userType',
-					        'propertyStatus'
 					      ].forEach(f => this.validateField(f));
 					      return !Object.values(this.errors).some(error => error !== '');
 					    },
@@ -161,7 +157,9 @@ import circle from "../assets/circle.svg"
 					        userType: this.userType,
 					        propertyStatus: this.propertyStatus
 					      };
-
+								//troubleshooting
+						    console.log('Submitting form data:', formData);
+								
 					      fetch('/.netlify/functions/submit-to-sheet', {
 					        method: 'POST',
 					        headers: { 'Content-Type': 'application/json' },

@@ -39,6 +39,7 @@ exports.handler = async function(event, context) {
       body: JSON.stringify({ message: 'Form submitted' })
     };
   } catch (error) {
+    console.error('Error submitting to Google Sheets:', error);
     return {
       statusCode: 500,
       body: JSON.stringify({ error: error.message }),
