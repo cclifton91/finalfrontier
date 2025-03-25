@@ -73,13 +73,13 @@ import circle from "../assets/circle.svg"
 					    email: '',
 					    phone: '',
 					    address: '',
-					    type: '',
 					    length: '',
 					    sellby: '',
 					    price: '',
 					    message: '',
 					    userType: '',
 					    propertyStatus: '',
+							status: '',
 					    errors: {},
 					    validateField(field) {
 					      this.errors[field] = '';
@@ -104,9 +104,6 @@ import circle from "../assets/circle.svg"
 					        case 'address':
 					          if (!this.address) this.errors.address = 'Address is required';
 					          break;
-					        case 'type':
-					          if (!this.type) this.errors.type = 'Property type is required';
-					          break;
 					        case 'length':
 					          if (!this.length) this.errors.length = 'Ownership length is required';
 					          break;
@@ -122,6 +119,9 @@ import circle from "../assets/circle.svg"
 					        case 'userType':
 					          if (!this.userType) this.errors.userType = 'User type is required';
 					          break;
+									case 'status':
+										if (!this.status) this.errors.status = 'Status is required';
+										break;
 					      }
 					      return !this.errors[field];
 					    },
@@ -132,12 +132,12 @@ import circle from "../assets/circle.svg"
 					        'email',
 					        'phone',
 					        'address',
-					        'type',
 					        'length',
 					        'sellby',
 					        'price',
 					        'message',
 					        'userType',
+									'status',
 					      ].forEach(f => this.validateField(f));
 					      return !Object.values(this.errors).some(error => error !== '');
 					    },
@@ -149,13 +149,12 @@ import circle from "../assets/circle.svg"
 					        email: this.email,
 					        phone: this.phone,
 					        address: this.address,
-					        type: this.type,
 					        length: this.length,
 					        sellby: this.sellby,
 					        price: this.price,
 					        message: this.message,
 					        userType: this.userType,
-					        propertyStatus: this.propertyStatus
+									status: this.status
 					      };
 								//troubleshooting
 						    console.log('Submitting form data:', formData);
@@ -243,18 +242,7 @@ import circle from "../assets/circle.svg"
 					  <p x-show="errors.phone" class="my-1 text-sm text-red-400" x-text="errors.phone"></p>
 					  <h3 class="my-10 text-2xl font-bold text-white">Tell Us About Your Property.</h3>
 					  <!-- Property Section -->
-					  <!-- Property Details -->
-					  <div class="flex flex-col gap-4 mb-6 sm:flex-row">
-					    <label class="flex items-stretch">
-					      <input type="radio" name="propertyStatus" value="occupied" x-model="propertyStatus" />
-					      <span class="ml-1 font-bold text-white font-paragraph">Property is Occupied</span>
-					    </label>
-					    <label class="flex">
-					      <input type="radio" name="propertyStatus" value="listed" x-model="propertyStatus" />
-					      <span class="ml-1 font-bold text-white font-paragraph">Property is Listed</span>
-					    </label>
-					    <p x-show="errors.propertyStatus" class="text-sm text-red-500" x-text="errors.propertyStatus"></p>
-					  </div>
+					  
 					  <!-- Property Address -->
 					  <input
 					    class="w-full px-6 py-4 mb-3 font-bold placeholder-gray-500 bg-white rounded-full focus:outline-none"
@@ -268,32 +256,32 @@ import circle from "../assets/circle.svg"
 					    required
 					  />
 					  <p x-show="errors.address" class="my-1 text-sm text-red-400" x-text="errors.address"></p>
-					  <!-- Property Type -->
-					  <div class="mb-3">
-					    <div class="relative">
-					      <select 
-					        class="block w-full px-6 py-4 font-bold bg-white border rounded-full appearance-none border-gray-50 focus:outline-none" 
-					        name="propertyType" 
-					        id="propertyType" 
-					        x-model="type"
-					        x-bind:class="{'border border-red-500': errors.type}"
-					        x-on:blur="validateField('type')"
-					        required
-					      >
-					        <option value="">Type of Property</option>
-					        <option value="mobile">Mobile Home</option>
-					        <option value="manufactured">Manufactured</option>
-					        <option value="condo">Condo</option>
-					        <option value="townhouse">Townhouse</option>
-					      </select>
-					      <div class="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 pointer-events-none">
-					        <svg class="w-4 h-4 fill-current" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 20 20">
-					          <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"></path>
-					        </svg>
-					      </div>
-					    </div>
-					  </div>
-					  <p x-show="errors.type" class="my-1 text-sm text-red-400" x-text="errors.type"></p>
+						<!-- Property Status --> 
+						<div class="mb-3">
+							<div class="relative">
+								<select 
+									class="block w-full px-6 py-4 font-bold bg-white border rounded-full appearance-none border-gray-50 focus:outline-none" 
+									name="status" 
+									id="status" 
+									x-model="status"
+									x-bind:class="{'border border-red-500': errors.status}"
+									x-on:blur="validateField('status')"
+									required
+								>
+									<option value="">Status of Listing</option>
+									<option value="Active">Active</option>
+									<option value="FSBO">For Sale By Owner</option>
+									<option value="Foreclosure">Foreclosure</option>
+									<option value="Pending">Pending</option>
+								</select>
+								<div class="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 pointer-events-none">
+									<svg class="w-4 h-4 fill-current" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 20 20">
+										<path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"></path>
+									</svg>
+								</div>
+							</div>
+						</div>
+						<p x-show="errors.status" class="my-1 text-sm text-red-400" x-text="errors.status"></p>					  
 					  <!-- How long have you owned the property? -->
 					  <div class="mb-3">
 					    <div class="relative">

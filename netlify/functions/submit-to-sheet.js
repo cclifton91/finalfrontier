@@ -20,18 +20,17 @@ exports.handler = async function(event, context) {
     const sheet = doc.sheetsByIndex[0];
     
     await sheet.addRow({
-      Name: data.name,
-      Email: data.email,
-      Phone: data.phone,
-      Address: data.address,
-      PropertyType: data.type,
-      OwnershipLength: data.length,
-      SellTimeframe: data.sellby,
-      Price: data.price,
-      Message: data.message,
-      UserType: data.userType,
-      PropertyStatus: data.propertyStatus,
-      SubmittedAt: new Date().toISOString()
+      'Client Name': data.name,
+      'Client Email': data.email,
+      'Client Phone': data.phone,
+      'Property Address': data.address,
+      'Property Length': data.length,
+      'Sell By': data.sellby,
+      'Ideal Asking Price': data.price,
+      'Most Important': data.message,
+      'Who': data.userType,
+      'Status': data.status,
+      'Submitted At': new Date().toISOString()
     });
     
     return {
