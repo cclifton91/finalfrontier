@@ -2,24 +2,24 @@
 import Layout from "../layouts/Layout.astro"
 import settings from "../data/settings.json"
 import { Image } from "astro:assets"
-import stars from "../assets/five-stars.svg"
 import circle from "../assets/circle.svg"
 import doubleCircle from "../assets/blue-double-circle.svg"
 import halfCircle from "../assets/half-double-circle.svg"
-import fourohfour from "../assets/error-404.svg"
 ---
 
 <Layout>
 	<section class="relative h-screen py-20 overflow-hidden 2xl:py-40 bg-gray-950">
 		<Image class="absolute top-0 right-0 md:-mr-96 md:-mt-112" src={circle} alt="svg of a circle" />
-		<Image class="absolute top-0 right-0 h-40 lg:h-80 lg:mr-64 lg:mt-24" src={stars} alt="svg stars" />
 		<Image class="absolute top-0 left-0 hidden h-64 -ml-10 lg:block" src={doubleCircle} alt="blue overlapping circles" />
 		<Image class="absolute bottom-0 left-0 h-80" src={halfCircle} alt="svg of a half circle" />
 		<div class="container relative px-4 mx-auto">
 			<div class="max-w-3xl mx-auto">
-				<div class="max-w-md mx-auto text-center">
-					<h2 class="mb-20 text-6xl font-bold text-yellow-600 font-heading">Thank you!</h2>
-          <p class="mx-auto mb-10 text-lg text-white">Don't hesitate to call us with any questions or concerns at <span><a style="color:blue; text-decoration:underline;" href={`tel:${settings.phone}`}>{settings.phone}</a></span>. We believe in clear communication and honesty above all else. Our goal is to help people who are seeking a fast and honest solution!</p>
+				<div class="max-w-lg mx-auto text-center h-screen flex flex-col items-center justify-center">
+					<h2 class="mb-20 text-7xl font-bold text-sky-600 font-heading">Thank you!</h2>
+					<p class="mx-auto mb-10 text-lg text-white text-xl">
+						Don't hesitate to call us with any questions or concerns at <span><a style="color:skyblue; text-decoration:underline;" href={`tel:${settings.phone}`}>{settings.phone}</a></span>. We
+						believe in clear communication and honesty above all else. Our goal is to help people who are seeking a fast and honest solution!
+					</p>
 				</div>
 			</div>
 		</div>

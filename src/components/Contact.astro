@@ -37,7 +37,7 @@ import circle from "../assets/circle.svg"
 												fill="white"></path>
 										</svg>
 									</span>
-									<p class="text-lg font-bold text-white">{settings.email}</p>
+									<p class="text-lg font-bold text-white"><a href={`mailto:${settings.email}`}>{settings.email}</a></p>
 								</div>
 							</div>
 							<div class="px-8 py-6 mb-4 bg-gray-800 rounded-lg">
@@ -63,12 +63,12 @@ import circle from "../assets/circle.svg"
 					<div class="max-w-lg lg:ml-20">
 						<!--FORM START -->
 						<form
-					  name="contact"
-					  method="POST"
-					  autocomplete="on"
-					  data-netlify="true"
-					  data-netlify-honeypot="bot-field"
-					  x-data="{
+							name="contact"
+							method="POST"
+							autocomplete="on"
+							data-netlify="true"
+							data-netlify-honeypot="bot-field"
+							x-data="{
 					    name: '',
 					    email: '',
 					    phone: '',
@@ -80,6 +80,7 @@ import circle from "../assets/circle.svg"
 					    userType: '',
 					    propertyStatus: '',
 							status: '',
+							agreed: '',
 					    errors: {},
 					    validateField(field) {
 					      this.errors[field] = '';
@@ -92,15 +93,15 @@ import circle from "../assets/circle.svg"
 					          else if (!/^[^@]+@[^@]+\.[a-zA-Z]{2,}$/.test(this.email)) this.errors.email = 'Invalid email';
 					          break;
 					        case 'phone':
-					          if (!this.phone) {
-					            this.errors.phone = 'Phone number is required';
-					          } else {
-					            const digitsOnly = this.phone.replace(/\D/g, '');
-					            if (digitsOnly.length !== 10 && !(digitsOnly.length === 11 && digitsOnly.charAt(0) === '1')) {
-					              this.errors.phone = 'Please enter a valid US phone number';
-					            }
-					          }
-					          break;
+									  if (!this.phone) {
+									    this.errors.phone = 'Phone number is required';
+									  } else {
+									    const cleaned = this.phone.replace(/[^0-9]/g, ''); // Clean all non-numbers
+									    if (!(cleaned.length === 10 || (cleaned.length === 11 && cleaned.startsWith('1')))) {
+									      this.errors.phone = 'Please enter a valid US phone number';
+									    }
+									  }
+									  break;
 					        case 'address':
 					          if (!this.address) this.errors.address = 'Address is required';
 					          break;
@@ -122,6 +123,9 @@ import circle from "../assets/circle.svg"
 									case 'status':
 										if (!this.status) this.errors.status = 'Status is required';
 										break;
+									case 'agreed':
+									if (!this.agreed) this.errors.agreed = 'Agreement is required';
+									break;
 					      }
 					      return !this.errors[field];
 					    },
@@ -138,6 +142,7 @@ import circle from "../assets/circle.svg"
 					        'message',
 					        'userType',
 									'status',
+									'agreed',
 					      ].forEach(f => this.validateField(f));
 					      return !Object.values(this.errors).some(error => error !== '');
 					    },
@@ -154,10 +159,11 @@ import circle from "../assets/circle.svg"
 					        price: this.price,
 					        message: this.message,
 					        userType: this.userType,
-									status: this.status
+									status: this.status,
+									agreed: this.agreed,
 					      };
 								//troubleshooting
-						    console.log('Submitting form data:', formData);
+						    //console.log('Submitting form data:', formData);
 								
 					      fetch('/.netlify/functions/submit-to-sheet', {
 					        method: 'POST',
@@ -177,212 +183,212 @@ import circle from "../assets/circle.svg"
 					      });
 					    }
 					  }"
-					  x-on:submit.prevent="submitForm()"
-						>
-					  <!-- Netlify Spam Protection -->
-					  <input type="hidden" name="form-name" value="contact" />
-					  <p class="hidden">
-					    <label>Don't fill this out: <input name="bot-field" /></label>
-					  </p>
-					  <!-- Basic Information Section -->
-					  <h3 class="mb-10 text-2xl font-bold text-white">Lets Get To Know You.</h3>
-					  <!-- Who Are You? -->
-					  <div class="flex flex-col gap-4 mb-6 sm:flex-row">
-					    <label class="flex items-center">
-					      <input type="radio" name="userType" value="homeowner" x-model="userType" required />
-					      <span class="ml-1 font-bold text-white font-paragraph">I'm a Homeowner</span>
-					    </label>
-					    <label class="flex items-center">
-					      <input type="radio" name="userType" value="investor" x-model="userType" required />
-					      <span class="ml-1 font-bold text-white font-paragraph">I'm a Investor</span>
-					    </label>
-					    <label class="flex items-center">
-					      <input type="radio" name="userType" value="agent" x-model="userType" required />
-					      <span class="ml-1 font-bold text-white font-paragraph">I'm a Agent</span>
-					    </label>
-					    <p x-show="errors.userType" class="text-sm text-red-500" x-text="errors.userType"></p>
-					  </div>
-					  <!-- Name -->
-					  <input
-					    class="w-full px-12 py-4 mb-3 font-bold placeholder-gray-500 bg-white rounded-full focus:outline-none"
-					    type="text"
-					    placeholder="Full Name"
-					    id="name"
-					    name="name"
-					    x-model="name"
-					    x-bind:class="{'border border-red-500': errors.name}"
-					    x-on:blur="validateField('name')"
-					    required
-					  />
-					  <p x-show="errors.name" class="my-1 text-sm text-red-400" x-text="errors.name"></p>
-					  <!-- Phone and Email -->
-					  <input
-					    class="w-full px-12 py-4 mb-3 font-bold placeholder-gray-500 bg-white rounded-full focus:outline-none"
-					    type="email"
-					    placeholder="Email"
-					    id="email"
-					    name="email"
-					    x-model="email"
-					    x-bind:class="{'border border-red-500': errors.email}"
-					    x-on:blur="validateField('email')"
-					    required
-					  />
-					  <p x-show="errors.email" class="my-1 text-sm text-red-400" x-text="errors.email"></p>
-					  <input
-					    class="w-full px-12 py-4 mb-3 font-bold placeholder-gray-500 bg-white rounded-full focus:outline-none"
-					    type="tel"
-					    placeholder="Phone Number - Digits Only"
-					    id="phone"
-					    name="phone"
-					    x-model="phone"
-					    x-bind:class="{'border border-red-500': errors.phone}"
-					    x-on:blur="validateField('phone')"
-					    required
-					  />
-					  <p x-show="errors.phone" class="my-1 text-sm text-red-400" x-text="errors.phone"></p>
-					  <h3 class="my-10 text-2xl font-bold text-white">Tell Us About Your Property.</h3>
-					  <!-- Property Section -->
-					  
-					  <!-- Property Address -->
-					  <input
-					    class="w-full px-6 py-4 mb-3 font-bold placeholder-gray-500 bg-white rounded-full focus:outline-none"
-					    type="text"
-					    placeholder="Property Address"
-					    id="address"
-					    name="address"
-					    x-model="address"
-					    x-bind:class="{'border border-red-500': errors.address}"
-					    x-on:blur="validateField('address')"
-					    required
-					  />
-					  <p x-show="errors.address" class="my-1 text-sm text-red-400" x-text="errors.address"></p>
-						<!-- Property Status --> 
-						<div class="mb-3">
-							<div class="relative">
-								<select 
-									class="block w-full px-6 py-4 font-bold bg-white border rounded-full appearance-none border-gray-50 focus:outline-none" 
-									name="status" 
-									id="status" 
-									x-model="status"
-									x-bind:class="{'border border-red-500': errors.status}"
-									x-on:blur="validateField('status')"
-									required
-								>
-									<option value="">Status of Listing</option>
-									<option value="Active">Active</option>
-									<option value="FSBO">For Sale By Owner</option>
-									<option value="Foreclosure">Foreclosure</option>
-									<option value="Pending">Pending</option>
-								</select>
-								<div class="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 pointer-events-none">
-									<svg class="w-4 h-4 fill-current" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 20 20">
-										<path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"></path>
-									</svg>
+							x-on:submit.prevent="submitForm()">
+							<!-- Netlify Spam Protection -->
+							<input type="hidden" name="form-name" value="contact" />
+							<p class="hidden">
+								<label>Don't fill this out: <input name="bot-field" /></label>
+							</p>
+							<!-- Basic Information Section -->
+							<h3 class="mb-10 text-2xl font-bold text-white">Lets Get To Know You.</h3>
+							<!-- Who Are You? -->
+							<div class="flex flex-col gap-4 mb-6 sm:flex-row">
+								<label class="flex items-center">
+									<input type="radio" name="userType" value="homeowner" x-model="userType" required />
+									<span class="ml-1 font-bold text-white font-paragraph">I'm a Homeowner</span>
+								</label>
+								<label class="flex items-center">
+									<input type="radio" name="userType" value="investor" x-model="userType" required />
+									<span class="ml-1 font-bold text-white font-paragraph">I'm a Investor</span>
+								</label>
+								<label class="flex items-center">
+									<input type="radio" name="userType" value="agent" x-model="userType" required />
+									<span class="ml-1 font-bold text-white font-paragraph">I'm a Agent</span>
+								</label>
+							</div>
+							<p x-show="errors.userType" class="text-sm text-red-500" x-text="errors.userType"></p>
+							<!-- Name -->
+							<input
+								class="w-full px-12 py-4 mb-3 font-bold placeholder-gray-500 bg-white rounded-full focus:outline-none"
+								type="text"
+								placeholder="Full Name"
+								id="name"
+								name="name"
+								x-model="name"
+								x-bind:class="{'border border-red-500': errors.name}"
+								x-on:blur="validateField('name')"
+								required
+							/>
+							<p x-show="errors.name" class="my-1 text-sm text-red-400" x-text="errors.name"></p>
+							<!-- Phone and Email -->
+							<input
+								class="w-full px-12 py-4 mb-3 font-bold placeholder-gray-500 bg-white rounded-full focus:outline-none"
+								type="email"
+								placeholder="Email"
+								id="email"
+								name="email"
+								x-model="email"
+								x-bind:class="{'border border-red-500': errors.email}"
+								x-on:blur="validateField('email')"
+								required
+							/>
+							<p x-show="errors.email" class="my-1 text-sm text-red-400" x-text="errors.email"></p>
+							<input
+								class="w-full px-12 py-4 mb-3 font-bold placeholder-gray-500 bg-white rounded-full focus:outline-none"
+								type="tel"
+								placeholder="Phone Number"
+								id="phone"
+								name="phone"
+								x-model="phone"
+								x-bind:class="{'border border-red-500': errors.phone}"
+								x-on:blur="validateField('phone')"
+								required
+							/>
+							<p x-show="errors.phone" class="my-1 text-sm text-red-400" x-text="errors.phone"></p>
+							<h3 class="my-10 text-2xl font-bold text-white">Tell Us About Your Property.</h3>
+							<!-- Property Section -->
+
+							<!-- Property Address -->
+							<input
+								class="w-full px-6 py-4 mb-3 font-bold placeholder-gray-500 bg-white rounded-full focus:outline-none"
+								type="text"
+								placeholder="Property Address"
+								id="address"
+								name="address"
+								x-model="address"
+								x-bind:class="{'border border-red-500': errors.address}"
+								x-on:blur="validateField('address')"
+								required
+							/>
+							<p x-show="errors.address" class="my-1 text-sm text-red-400" x-text="errors.address"></p>
+							<!-- Property Status -->
+							<div class="mb-3">
+								<div class="relative">
+									<select
+										class="block w-full px-6 py-4 font-bold bg-white border rounded-full appearance-none border-gray-50 focus:outline-none"
+										name="status"
+										id="status"
+										x-model="status"
+										x-bind:class="{'border border-red-500': errors.status}"
+										x-on:blur="validateField('status')"
+										required>
+										<option value="">Status of Listing</option>
+										<option value="Active">Active</option>
+										<option value="FSBO">For Sale By Owner</option>
+										<option value="Foreclosure">Foreclosure</option>
+										<option value="Pending">Pending</option>
+									</select>
+									<div class="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 pointer-events-none">
+										<svg class="w-4 h-4 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+											<path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"></path>
+										</svg>
+									</div>
 								</div>
 							</div>
-						</div>
-						<p x-show="errors.status" class="my-1 text-sm text-red-400" x-text="errors.status"></p>					  
-					  <!-- How long have you owned the property? -->
-					  <div class="mb-3">
-					    <div class="relative">
-					      <select 
-					        class="block w-full px-6 py-4 font-bold bg-white border rounded-full appearance-none border-gray-50 focus:outline-none" 
-					        name="ownershiptime" 
-					        id="ownershiptime" 
-					        x-model="time"
-					        x-bind:class="{'border border-red-500': errors.time}"
-					        x-on:blur="validateField('time')"
-					        required
-					      >
-					        <option value="" style="color: #6b7280;">How Long Have You Owned The Property?</option>
-					        <option value="0-11">0-11 months</option>
-					        <option value="1-5">1-5 years</option>
-					        <option value="5-15">5-15 years</option>
-					        <option value="15-25">15-25 years</option>
-					        <option value="26+">26+ years</option>
-					      </select>
-					      <div class="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 pointer-events-none">
-					        <svg class="w-4 h-4 fill-current" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 20 20">
-					          <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"></path>
-					        </svg>
-					      </div>
-					    </div>
-					  </div>
-					  <p x-show="errors.time" class="my-1 text-sm text-red-400" x-text="errors.time"></p>
-					  <!-- When Would You Like To Sell? -->
-					  <div class="mb-3">
-					    <div class="relative">
-					      <select 
-					        class="block w-full px-6 py-4 font-bold bg-white border rounded-full appearance-none border-gray-50 focus:outline-none" 
-					        name="sellTimeframe" 
-					        id="sellTimeframe" 
-					        x-model="sellby"
-					        x-bind:class="{'border border-red-500': errors.sellby}"
-					        x-on:blur="validateField('sellby')"
-					        required
-					      >
-					        <option value="">When Would You Like To Sell?</option>
-					        <option value="asap">ASAP</option>
-					        <option value="within-year">Within the year</option>
-					        <option value="next-year">Next year or later</option>
-					      </select>
-					      <div class="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 pointer-events-none">
-					        <svg class="w-4 h-4 fill-current" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 20 20">
-					          <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"></path>
-					        </svg>
-					      </div>
-					    </div>
-					  </div>
-					  <p x-show="errors.sellby" class="my-1 text-sm text-red-400" x-text="errors.sellby"></p>
-					  <!-- Ideal Asking Price -->
-					  <input
-					    class="w-full px-6 py-4 mb-3 font-bold placeholder-gray-500 bg-white rounded-full focus:outline-none"
-					    type="text"
-					    placeholder="Ideal Asking Price? (USD)"
-					    id="price"
-					    name="price"
-					    x-model="price"
-					    x-bind:class="{'border border-red-500': errors.price}"
-					    x-on:blur="validateField('price')"
-					    required
-					  />
-					  <p x-show="errors.price" class="my-1 text-sm text-red-400" x-text="errors.price"></p>
-  						<!-- Message -->
-						  <textarea
-							class="w-full px-6 py-4 mb-6 font-bold placeholder-gray-500 bg-white resize-none rounded-3xl focus:outline-none"
-							name="message"
-							id="message"
-							cols="20"
-							rows="5"
-							placeholder="What is the most important to you when working with us?"
-							x-model="message"
-							x-bind:class="{'border border-red-500': errors.message}"
-							x-on:blur="validateField('message')"
-							required
-						></textarea>
-						<p x-show="errors.message" class="my-1 text-sm text-red-400" x-text="errors.message"></p>
-						<button 
-							type="submit" 
-							class="px-12 py-4 font-bold text-white transition duration-200 bg-red-800 rounded-full hover:bg-red-900"
-						>Send message</button>
+							<p x-show="errors.status" class="my-1 text-sm text-red-400" x-text="errors.status"></p>
+							<!-- How long have you owned the property? -->
+							<div class="mb-3">
+								<div class="relative">
+									<select
+										class="block w-full px-6 py-4 font-bold bg-white border rounded-full appearance-none border-gray-50 focus:outline-none"
+										name="ownershiptime"
+										id="ownershiptime"
+										x-model="time"
+										x-bind:class="{'border border-red-500': errors.time}"
+										x-on:blur="validateField('time')"
+										required>
+										<option value="" style="color: #6b7280;">How Long Have You Owned The Property?</option>
+										<option value="0-11">0-11 months</option>
+										<option value="1-5">1-5 years</option>
+										<option value="5-15">5-15 years</option>
+										<option value="15-25">15-25 years</option>
+										<option value="26+">26+ years</option>
+									</select>
+									<div class="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 pointer-events-none">
+										<svg class="w-4 h-4 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+											<path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"></path>
+										</svg>
+									</div>
+								</div>
+							</div>
+							<p x-show="errors.time" class="my-1 text-sm text-red-400" x-text="errors.time"></p>
+							<!-- When Would You Like To Sell? -->
+							<div class="mb-3">
+								<div class="relative">
+									<select
+										class="block w-full px-6 py-4 font-bold bg-white border rounded-full appearance-none border-gray-50 focus:outline-none"
+										name="sellTimeframe"
+										id="sellTimeframe"
+										x-model="sellby"
+										x-bind:class="{'border border-red-500': errors.sellby}"
+										x-on:blur="validateField('sellby')"
+										required>
+										<option value="">When Would You Like To Sell?</option>
+										<option value="asap">ASAP</option>
+										<option value="within-year">Within the year</option>
+										<option value="next-year">Next year or later</option>
+									</select>
+									<div class="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 pointer-events-none">
+										<svg class="w-4 h-4 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+											<path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"></path>
+										</svg>
+									</div>
+								</div>
+							</div>
+							<p x-show="errors.sellby" class="my-1 text-sm text-red-400" x-text="errors.sellby"></p>
+							<!-- Ideal Asking Price -->
+							<input
+								class="w-full px-6 py-4 mb-3 font-bold placeholder-gray-500 bg-white rounded-full focus:outline-none"
+								type="text"
+								placeholder="Ideal Asking Price? (USD)"
+								id="price"
+								name="price"
+								x-model="price"
+								x-bind:class="{'border border-red-500': errors.price}"
+								x-on:blur="validateField('price')"
+								required
+							/>
+							<p x-show="errors.price" class="my-1 text-sm text-red-400" x-text="errors.price"></p>
+							<!-- Message -->
+							<textarea
+								class="w-full px-6 py-4 mb-6 font-bold placeholder-gray-500 bg-white resize-none rounded-3xl focus:outline-none"
+								name="message"
+								id="message"
+								cols="20"
+								rows="5"
+								placeholder="What is the most important to you when working with us?"
+								x-model="message"
+								x-bind:class="{'border border-red-500': errors.message}"
+								x-on:blur="validateField('message')"
+								required></textarea>
+							<p x-show="errors.message" class="my-1 text-sm text-red-400" x-text="errors.message"></p>
+							<div class="flex mb-10">
+								<input type="checkbox" name="agreed" id="agreed" x-model="agreed" x-bind:class="{'border border-red-500': errors.message}" x-on:blur="validateField('message')" value="yes" />
+								<p class="pl-4 max-w-md text-sm text-gray-300">
+									By submitting your informatio, you consent to recieve phone calls, and text messages from Final Frontier Homes. Consent is not required to make a purchase and can be revoked at any
+									time. Message and data rates may apply. By submitting, you also agree to our Privacy Policy and Terms of Service.
+								</p>
+							</div>
+							<p x-show="errors.agreed" class="my-1 text-sm text-red-400" x-text="errors.agreed"></p>
+							<button type="submit" class="px-12 py-4 font-bold text-white transition duration-200 bg-red-800 rounded-full hover:bg-red-900">Send message</button>
 						</form>
 					</div>
-        </div>
-      </div>
-    </div>
-  </div>
+				</div>
+			</div>
+		</div>
+	</div>
 </section>
 
 <style>
-  select:invalid {
-    color: #6b7280; /* Gray color for placeholder */
-  }
-  
-  select option:first-child {
-    color: #6b7280;
-  }
-  
-  select option {
-    color: #111827; /* Dark color for other options */
-  }
+	select:invalid {
+		color: #6b7280; /* Gray color for placeholder */
+	}
+
+	select option:first-child {
+		color: #6b7280;
+	}
+
+	select option {
+		color: #111827; /* Dark color for other options */
+	}
 </style>
