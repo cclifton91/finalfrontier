@@ -1,0 +1,433 @@
+<form
+	name="contact"
+	method="POST"
+	id="contactForm"
+	autocomplete="on"
+	data-netlify="true"
+	data-netlify-honeypot="bot-field"
+	x-data="{
+    userType: '',
+    name: '',
+    email: '',
+    phone: '',
+    currentlyListed: '',
+    homeType: '',
+    occupied: '',
+    address: '',
+    time: '',
+    repairs: '',
+    sellby: '',
+    price: '',
+    message: '',
+    investorMessage: '',
+    propertyStatus: '',
+		status: '',
+		agreed: '',
+    errors: {},
+
+    //Validation for Individual Fields
+    validateField(field) {
+      this.errors[field] = '';
+      switch(field) {
+        case 'name':
+          if (!this.name) this.errors.name = 'Name is required';
+          break;
+        case 'email':
+          if (!this.email) this.errors.email = 'Email is required';
+          else if (!/^[^@]+@[^@]+\.[a-zA-Z]{2,}$/.test(this.email)) this.errors.email = 'Invalid email';
+          break;
+        case 'phone':
+  			  if (!this.phone) {
+  			    this.errors.phone = 'Phone number is required';
+  			  } else {
+  			    const cleaned = this.phone.replace(/[^0-9]/g, ''); // Clean all non-numbers
+  			    if (!(cleaned.length === 10 || (cleaned.length === 11 && cleaned.startsWith('1')))) {
+  			      this.errors.phone = 'Please enter a valid US phone number';
+  			    }
+  			  }
+			    break;
+        case 'currentlyListed':
+          if (!this.currentlyListed) this.errors.currentlyListed = 'Please select an option';
+          break;
+        case 'address':
+          if (!this.address) this.errors.address = 'Address is required';
+          break;
+        case 'homeType':
+          if (!this.homeType) this.errors.homeType = 'Please select an option';
+          break;
+        case 'occupied':
+          if (!this.occupied) this.errors.occupied = 'Please select an option';
+          break;
+        case 'time':
+          if (!this.time) this.errors.time = 'Ownership time is required';
+          break;
+        case 'sellby':
+          if (!this.sellby) this.errors.sellby = 'Sell by date is required';
+          break;
+        case 'repairs': 
+          if (!this.repairs) this.errors.repairs = 'Repairs are required';
+          break;
+        case 'price':
+          if (!this.price) this.errors.price = 'Price is required';
+          break;
+        case 'message':
+          if (!this.message && this.userType === 'homeowner') this.errors.message = 'Message is required';
+          break;
+        case 'investorMessage':
+          if (!this.investorMessage && this.userType === 'investor') this.errors.investorMessage = 'Message is required';
+          break;
+        case 'userType':
+          if (!this.userType) this.errors.userType = 'User type is required';
+          break;
+				case 'status':
+					if (!this.status) this.errors.status = 'Status is required';
+					break;
+				case 'agreed':
+				if (!this.agreed) this.errors.agreed = 'Agreement is required';
+				break;
+      }
+      return !this.errors[field];
+    },
+    
+    //Dynamic validation depending on userType
+    validateForm() {
+      this.errors = {};
+      const alwaysRequired = ['name', 'email', 'phone', 'message', 'userType', 'agreed'];
+      const homeownerOnly = ['currentlyListed', 'homeType', 'occupied', 'address', 'time', 'sellby', 'repairs', 'price', 'status'];
+      const investorOnly = ['investorMessage'];
+
+      alwaysRequired.forEach(f => this.validateField(f));
+      if (this.userType === 'homeowner') {
+        homeownerOnly.forEach(f => this.validateField(f));
+      }
+      if (this.userType === 'investor') {
+        investorOnly.forEach(f => this.validateField(f));
+      }
+
+      return !Object.values(this.errors).some(error => error !== '');
+    },
+    
+    //Handle Form Submission
+    submitForm() {
+      if (!this.validateForm()) return;
+
+      const formData = {
+        name: this.name,
+        email: this.email,
+        phone: this.phone,
+        address: this.address,
+        time: this.time,
+        sellby: this.sellby,
+        price: this.price,
+        message: this.message,
+        investorMessage: this.investorMessage,
+        userType: this.userType,
+				status: this.status,
+				agreed: this.agreed,
+      };
+			//troubleshooting
+	    //console.log('Submitting form data:', formData);
+			
+      fetch('/.netlify/functions/submit-to-sheet', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      })
+      .then(res => {
+        if (res.ok) {
+          window.location.href = '/thank-you';
+        } else {
+          alert('There was a problem submitting the form. Please try again.');
+        }
+      })
+      .catch(err => {
+        console.error('Error submitting form:', err);
+        alert('An unexpected error occurred.');
+      });
+    }
+  }"
+	x-on:submit.prevent="submitForm()">
+	<!-- Netlify Spam Protection -->
+	<input type="hidden" name="form-name" value="contact" />
+	<p class="hidden">
+		<label>Don't fill this out: <input name="bot-field" /></label>
+	</p>
+	<!-- Form Heading -->
+	<h3 class="mb-10 text-2xl font-bold text-white">Lets Get To Know You.</h3>
+	<!-- User Type -->
+	<div class="flex flex-col gap-4 mb-6 sm:flex-row">
+		<label class="flex items-center">
+			<input type="radio" name="userType" value="homeowner" x-model="userType" required />
+			<span class="ml-1 font-bold text-white font-paragraph">I'm a Homeowner</span>
+		</label>
+		<label class="flex items-center">
+			<input type="radio" name="userType" value="investor" x-model="userType" required />
+			<span class="ml-1 font-bold text-white font-paragraph">I'm a Investor</span>
+		</label>
+		<p x-show="errors.userType" class="text-sm text-red-500" x-text="errors.userType"></p>
+	</div>
+
+	<!--Form Inputs Depending on User Type-->
+	<div x-show="userType" x-transition class="flex flex-col gap-4">
+		<!-- Shared Inputs-->
+		<input
+			class="w-full px-12 py-4 font-bold placeholder-gray-500 bg-white rounded-full focus:outline-none"
+			type="text"
+			placeholder="Full Name"
+			id="name"
+			name="name"
+			x-model="name"
+			x-bind:class="{'border border-red-500': errors.name}"
+			x-on:blur="validateField('name')"
+			required
+		/>
+		<p x-show="errors.name" class="my-1 text-sm text-red-400" x-text="errors.name"></p>
+		<input
+			class="w-full px-12 py-4 font-bold placeholder-gray-500 bg-white rounded-full focus:outline-none"
+			type="email"
+			placeholder="Email"
+			id="email"
+			name="email"
+			x-model="email"
+			x-bind:class="{'border border-red-500': errors.email}"
+			x-on:blur="validateField('email')"
+			required
+		/>
+		<p x-show="errors.email" class="my-1 text-sm text-red-400" x-text="errors.email"></p>
+		<input
+			class="w-full px-12 py-4 font-bold placeholder-gray-500 bg-white rounded-full focus:outline-none"
+			type="tel"
+			placeholder="Phone Number"
+			id="phone"
+			name="phone"
+			x-model="phone"
+			x-bind:class="{'border border-red-500': errors.phone}"
+			x-on:blur="validateField('phone')"
+			required
+		/>
+		<p x-show="errors.phone" class="my-1 text-sm text-red-400" x-text="errors.phone"></p>
+
+		<!-- Homeowner-Only Section -->
+		<div x-show="userType === 'homeowner'" x-transition>
+			<h3 class="my-10 text-2xl font-bold text-white">Tell Us About Your Property.</h3>
+			<p class="mb-3 font-bold text-white font-heading">Is The House Currently Listed?</p>
+			<div class="flex flex-col gap-4 mb-6 sm:flex-row">
+				<label class="flex items-center">
+					<input type="radio" name="currentlyListed" value="yes" x-model="currentlyListed" required />
+					<span class="ml-1 font-bold text-white font-paragraph">Yes</span>
+				</label>
+				<label class="flex items-center">
+					<input type="radio" name="currentlyListed" value="no" x-model="currentlyListed" required />
+					<span class="ml-1 font-bold text-white font-paragraph">No</span>
+				</label>
+				<p x-show="errors.currentlyListed" class="text-sm text-red-500" x-text="errors.currentlyListed"></p>
+			</div>
+			<!-- Home Type -->
+			<p class="mb-3 font-bold text-white font-heading">Is the house a Trailer, Mobile, or Manufactured Home?</p>
+			<div class="flex flex-col gap-4 mb-6 sm:flex-row">
+				<label class="flex items-center">
+					<input type="radio" name="homeType" value="yes" x-model="homeType" required />
+					<span class="ml-1 font-bold text-white font-paragraph">Yes</span>
+				</label>
+				<label class="flex items-center">
+					<input type="radio" name="homeType" value="no" x-model="homeType" required />
+					<span class="ml-1 font-bold text-white font-paragraph">No</span>
+				</label>
+				<p x-show="errors.homeType" class="text-sm text-red-500" x-text="errors.homeType"></p>
+			</div>
+			<!-- Occupancy -->
+			<p class="mb-3 font-bold text-white font-heading">Is the house currently occupied?</p>
+			<div class="flex flex-col gap-4 mb-6 sm:flex-row">
+				<label class="flex items-center">
+					<input type="radio" name="occupied" value="yes" x-model="occupied" required />
+					<span class="ml-1 font-bold text-white font-paragraph">Yes</span>
+				</label>
+				<label class="flex items-center">
+					<input type="radio" name="occupied" value="no" x-model="occupied" required />
+					<span class="ml-1 font-bold text-white font-paragraph">No</span>
+				</label>
+				<p x-show="errors.occupied" class="text-sm text-red-500" x-text="errors.occupied"></p>
+			</div>
+			<input
+				class="w-full px-6 py-4 mb-3 font-bold placeholder-gray-500 bg-white rounded-full focus:outline-none"
+				type="text"
+				placeholder="Property Address"
+				id="address"
+				name="address"
+				x-model="address"
+				x-bind:class="{'border border-red-500': errors.address}"
+				x-on:blur="validateField('address')"
+				required
+			/>
+			<p x-show="errors.address" class="my-1 text-sm text-red-400" x-text="errors.address"></p>
+			<!-- Property Status -->
+			<div class="mb-3">
+				<div class="relative">
+					<select
+						class="block w-full px-6 py-4 font-bold bg-white border rounded-full appearance-none border-gray-50 focus:outline-none"
+						name="status"
+						id="status"
+						x-model="status"
+						x-bind:class="{'border border-red-500': errors.status}"
+						x-on:blur="validateField('status')"
+						required>
+						<option value="">Status of Listing</option>
+						<option value="Active">Active</option>
+						<option value="FSBO">For Sale By Owner</option>
+						<option value="Foreclosure">Foreclosure</option>
+						<option value="Pending">Pending</option>
+					</select>
+					<div class="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 pointer-events-none">
+						<svg class="w-4 h-4 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+							<path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"></path>
+						</svg>
+					</div>
+				</div>
+			</div>
+			<p x-show="errors.status" class="my-1 text-sm text-red-400" x-text="errors.status"></p>
+			<!-- How long have you owned the property? -->
+			<div class="mb-3">
+				<div class="relative">
+					<select
+						class="block w-full px-6 py-4 font-bold bg-white border rounded-full appearance-none border-gray-50 focus:outline-none"
+						name="ownershiptime"
+						id="ownershiptime"
+						x-model="time"
+						x-bind:class="{'border border-red-500': errors.time}"
+						x-on:blur="validateField('time')"
+						required>
+						<option value="" style="color: #6b7280;">How Long Have You Owned The Property?</option>
+						<option value="0-11">0-11 months</option>
+						<option value="1-5">1-5 years</option>
+						<option value="5-15">5-15 years</option>
+						<option value="15-25">15-25 years</option>
+						<option value="26+">26+ years</option>
+					</select>
+					<div class="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 pointer-events-none">
+						<svg class="w-4 h-4 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+							<path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"></path>
+						</svg>
+					</div>
+				</div>
+			</div>
+			<p x-show="errors.time" class="my-1 text-sm text-red-400" x-text="errors.time"></p>
+			<!-- Home Repairs -->
+			<div class="mb-3">
+				<div class="relative">
+					<select
+						class="block w-full px-6 py-4 font-bold bg-white border rounded-full appearance-none border-gray-50 focus:outline-none"
+						name="repairs"
+						id="repairs"
+						x-model="repairs"
+						x-bind:class="{'border border-red-500': errors.repairs}"
+						x-on:blur="validateField('repairs')"
+						required>
+						<option value="">What Kind of Repairs Does The House Need?</option>
+						<option value="Full Repair">Full Repair</option>
+						<option value="Room Repairs">Some Rooms (Kitchen, Bathroom, Roof)</option>
+						<option value="Minor Repairs">Minor Repairs</option>
+						<option value="No Repairs">No Repairs</option>
+					</select>
+					<div class="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 pointer-events-none">
+						<svg class="w-4 h-4 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+							<path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"></path>
+						</svg>
+					</div>
+				</div>
+			</div>
+			<p x-show="errors.repairs" class="my-1 text-sm text-red-400" x-text="errors.repairs"></p>
+			<!-- When Would You Like To Sell? -->
+			<div class="mb-3">
+				<div class="relative">
+					<select
+						class="block w-full px-6 py-4 font-bold bg-white border rounded-full appearance-none border-gray-50 focus:outline-none"
+						name="sellTimeframe"
+						id="sellTimeframe"
+						x-model="sellby"
+						x-bind:class="{'border border-red-500': errors.sellby}"
+						x-on:blur="validateField('sellby')"
+						required>
+						<option value="">When Would You Like To Sell?</option>
+						<option value="asap">ASAP</option>
+						<option value="within-30-days">Within 30 Days</option>
+						<option value="within-60-days">Within 60 Days</option>
+						<option value="within-90-days">Within 90 Days</option>
+						<option value="no-timeline">No Timeline</option>
+					</select>
+					<div class="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 pointer-events-none">
+						<svg class="w-4 h-4 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+							<path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"></path>
+						</svg>
+					</div>
+				</div>
+			</div>
+			<p x-show="errors.sellby" class="my-1 text-sm text-red-400" x-text="errors.sellby"></p>
+			<!-- Ideal Asking Price -->
+			<input
+				class="w-full px-6 py-4 mb-3 font-bold placeholder-gray-500 bg-white rounded-full focus:outline-none"
+				type="text"
+				placeholder="Ideal Asking Price? (USD)"
+				id="price"
+				name="price"
+				x-model="price"
+				x-bind:class="{'border border-red-500': errors.price}"
+				x-on:blur="validateField('price')"
+				required
+			/>
+			<p x-show="errors.price" class="my-1 text-sm text-red-400" x-text="errors.price"></p>
+			<textarea
+				class="w-full px-6 py-4 mb-6 font-bold placeholder-gray-500 bg-white resize-none rounded-3xl focus:outline-none"
+				name="message"
+				id="message"
+				cols="20"
+				rows="5"
+				placeholder="What is most important to you when working with us?"
+				x-model="message"
+				x-bind:class="{'border border-red-500': errors.message}"
+				x-on:blur="validateField('message')"
+				required></textarea>
+			<p x-show="errors.message" class="my-1 text-sm text-red-400" x-text="errors.message"></p>
+		</div>
+
+		<!-- Investor Message -->
+		<div x-show="userType === 'investor'" x-transition>
+			<textarea
+				class="w-full px-6 py-4 mb-6 font-bold placeholder-gray-500 bg-white resize-none rounded-3xl focus:outline-none"
+				name="investorMessage"
+				id="investorMessage"
+				cols="20"
+				rows="5"
+				placeholder="What kind of investment opportunities are you looking for (buy box)?"
+				x-model="investorMessage"
+				x-bind:class="{'border border-red-500': errors.investorMessage}"
+				x-on:blur="validateField('investorMessage')"
+				x-bind:required="userType === 'investor'"></textarea>
+			<p x-show="errors.investorMessage" class="my-1 text-sm text-red-400" x-text="errors.investorMessage"></p>
+		</div>
+
+		<!--Checkbox and Submit-->
+		<div class="flex mb-10">
+			<input type="checkbox" name="agreed" id="agreed" x-model="agreed" x-bind:class="{'border border-red-500': errors.message}" x-on:blur="validateField('message')" value="yes" />
+			<p class="max-w-md pl-4 text-sm text-gray-300">
+				By submitting your information, you consent to recieve phone calls, and text messages from Final Frontier Homes. Consent is not required to make a purchase and can be revoked at any time.
+				Message and data rates may apply. By submitting, you also agree to our Privacy Policy and Terms of Service.
+			</p>
+		</div>
+		<p x-show="errors.agreed" class="my-1 text-sm text-red-400" x-text="errors.agreed"></p>
+		<button type="submit" class="px-12 py-4 font-bold text-white transition duration-200 bg-red-800 rounded-full hover:bg-red-900">Send message</button>
+	</div>
+</form>
+
+<style>
+	select:invalid {
+		color: #6b7280; /* Gray color for placeholder */
+	}
+
+	select option:first-child {
+		color: #6b7280;
+	}
+
+	select option {
+		color: #111827; /* Dark color for other options */
+	}
+</style>
